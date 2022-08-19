@@ -41,6 +41,20 @@ const bookController={
             res.status(200).json(err);
         }
 
+    },
+    //DELETE BOOK AND DELETE ID 
+    deleteBook:async(req,res)=>{
+        try{
+            await Book.updateMany(
+                {author:req.params.id},
+                {$pull:{author:req.params.id}}
+            )
+          const showdelete=  await Book.findByIdAndDelete(req.params.id);
+            res.status(200).json(showdelete)
+        }
+        catch(err ){
+            res.status(500).json(err)
+        }
     }
 };
 module.exports=bookController;
