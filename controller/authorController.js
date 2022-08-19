@@ -30,6 +30,7 @@ const authorController={
         //res.status(200).json(req.body);
         try{
             const newAuthor= new Author(req.body);
+            //DUNG DE REQUEST GIA TRI JSON VAO BODY
             const saveAuthor= await newAuthor.save();
             res.status(200).json(saveAuthor);
         }
@@ -40,7 +41,15 @@ const authorController={
     //END ADD NEW AUTHOR
     deleteAuthor:async(req,res)=>{
         try{
-            const delauthor =await Author.findByIdAndDelete(req.params.id)
+            await Author.updateMany(
+                {books:req.params.id},
+                {$pull:{books:req.params.id}}
+            )
+            //DONG LENH NAY DUNG DE XOA ID LIEN KET GIUA AUTHOR VA BOOK (TIM KIEM VA XOA DI)
+            await Author.findByIdAndDelete(req.params.id);
+            res.status(200).json("Complete Delete Author And Delete Book Id Author")
+            //KHI DUNG findByIdAndDelete THI GIA TRI CUA ID BOOK SE BI XOA DI . VA GIA TRI ID 
+            //AUTHOR CUA BOOK ID SE THANH GIA TRI NULL
 
         }
         catch(err){
